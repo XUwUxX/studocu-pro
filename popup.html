@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Studocu Tools</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+
+  <header class="shimmer-effect">
+    <div class="logo">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 14 4-4H8z"/><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+      <h1>Studocu Extension</h1>
+    </div>
+    <span class="version">v1.1</span>
+  </header>
+
+  <main>
+    <div class="card">
+      <button id="checkBtn" class="btn btn-primary shimmer-effect">
+        <div class="icon-box">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M12 18v-6"/><path d="m9 15 3 3 3-3"/></svg>
+        </div>
+        <div class="btn-text">
+          <span class="btn-title">Tạo file PDF</span>
+          <span class="btn-desc">Dùng như cái tên</span>
+        </div>
+      </button>
+
+      <button id="clearBtn" class="btn btn-secondary shimmer-effect">
+        <div class="icon-box">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 10 10 4 4 0 0 1-5-5 4 4 0 0 1-5-5Z"/><circle cx="7.5" cy="13.5" r=".5" fill="currentColor"/><circle cx="11.5" cy="16.5" r=".5" fill="currentColor"/><circle cx="16.5" cy="13.5" r=".5" fill="currentColor"/><circle cx="12.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="8.5" r=".5" fill="currentColor"/></svg>
+        </div>
+        <div class="btn-text">
+          <span class="btn-title">Bypass mờ và watermark</span>
+          <span class="btn-desc">Xoá cookies và reset trang</span>
+        </div>
+      </button>
+    </div>
+
+    <div id="status" class="status-bar shimmer-effect">
+      <span class="status-dot"></span>
+      <span id="status-text">Sẵn sàng hoạt động</span>
+    </div>
+
+    <footer>
+      Made with <span class="heart">❤</span> by <span class="author">Kevinz</span>
+    </footer>
+  </main>
+
+  <script src="popup.js"></script>
+</body>
+</html>
