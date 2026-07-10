@@ -13,7 +13,12 @@
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 14 4-4H8z"/><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
       <h1>Studocu Extension</h1>
     </div>
-    <span class="version">v1.1</span>
+    
+    <!-- Thanh chọn ngôn ngữ bổ sung -->
+    <div class="lang-switch-container">
+      <span class="version">v1.1</span>
+      <button id="langBtn" class="lang-btn">EN</button>
+    </div>
   </header>
 
   <main>
@@ -23,8 +28,8 @@
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M12 18v-6"/><path d="m9 15 3 3 3-3"/></svg>
         </div>
         <div class="btn-text">
-          <span class="btn-title">Tạo file PDF</span>
-          <span class="btn-desc">Dùng như cái tên</span>
+          <span class="btn-title" data-vi="Tạo file PDF" data-en="Create PDF File">Tạo file PDF</span>
+          <span class="btn-desc" data-vi="Dùng như cái tên" data-en="Does exactly what it says">Dùng như cái tên</span>
         </div>
       </button>
 
@@ -33,19 +38,19 @@
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 10 10 4 4 0 0 1-5-5 4 4 0 0 1-5-5Z"/><circle cx="7.5" cy="13.5" r=".5" fill="currentColor"/><circle cx="11.5" cy="16.5" r=".5" fill="currentColor"/><circle cx="16.5" cy="13.5" r=".5" fill="currentColor"/><circle cx="12.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="8.5" r=".5" fill="currentColor"/></svg>
         </div>
         <div class="btn-text">
-          <span class="btn-title">Bypass mờ và watermark</span>
-          <span class="btn-desc">Xoá cookies và reset trang</span>
+          <span class="btn-title" data-vi="Bypass mờ và watermark" data-en="Bypass Blur & Watermark">Bypass mờ và watermark</span>
+          <span class="btn-desc" data-vi="Xoá cookies và reset trang" data-en="Clear cookies and reset page">Xoá cookies và reset trang</span>
         </div>
       </button>
     </div>
 
     <div id="status" class="status-bar shimmer-effect">
       <span class="status-dot"></span>
-      <span id="status-text">Sẵn sàng hoạt động</span>
+      <span id="status-text" data-vi="Sẵn sàng hoạt động" data-en="Ready to work">Sẵn sàng hoạt động</span>
     </div>
 
     <footer>
-      Made with <span class="heart">❤</span> by <span class="author">Kevinz</span>
+      <span data-vi="Được làm với " data-en="Made with ">Được làm với </span><span class="heart">❤</span><span data-vi=" bởi " data-en=" by "> bởi </span><span class="author">Kevinz</span>
     </footer>
   </main>
 
