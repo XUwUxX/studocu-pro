@@ -1,6 +1,30 @@
-function updateStatus(msg, isProcessing = false) {
+function updateStatus(msgKey, isProcessing = false, dynamicData = null) {
     const statusText = document.getElementById('status-text');
     const statusBar = document.getElementById('status');
+    const currentLang = localStorage.getItem('preferredLang') || 'vi';
+
+    // Bộ từ điển riêng cho hàm updateStatus
+    const statusTranslations = {
+        vi: {
+            clearing: "Đang quét và xóa cookie...",
+            success: `Đã xóa ${dynamicData} cookies! Đang tải lại...`,
+            error: "Lỗi: "
+        },
+        en: {
+            clearing: "Scanning and clearing cookies...",
+            success: `Deleted ${dynamicData} cookies! Reloading...`,
+            error: "Error: "
+        }
+    };
+
+    // Xác định nội dung text hiển thị dựa trên key truyền vào
+    let msg = msgKey;
+    if (statusTranslations[currentLang] && statusTranslations[currentLang][msgKey]) {
+        msg = statusTranslations[currentLang][msgKey];
+    } else if (msgKey === 'error' && dynamicData) {
+        msg = statusTranslations[currentLang]['error'] + dynamicData;
+    }
+
     if (statusText && statusBar) {
         statusText.innerText = msg;
         statusBar.classList.toggle('processing', isProcessing);
@@ -10,8 +34,40 @@ function updateStatus(msg, isProcessing = false) {
     }
 }
 
+// --- LOGIC CHUYỂN ĐỔI NGÔN NGỮ TRÊN POPUP ---
+document.addEventListener('DOMContentLoaded', () => {
+    const langBtn = document.getElementById('langBtn');
+    let currentLang = localStorage.getItem('preferredLang') || 'vi';
+    
+    function applyLanguage(lang) {
+        const elements = document.querySelectorAll('[data-vi][data-en]');
+        elements.forEach(el => {
+            el.textContent = el.getAttribute(`data-${lang}`);
+        });
+        if (langBtn) langBtn.textContent = lang === 'vi' ? 'EN' : 'VI';
+        document.documentElement.lang = lang;
+    }
+
+    applyLanguage(currentLang);
+
+    if (langBtn) {
+        langBtn.addEventListener('click', () => {
+            currentLang = currentLang === 'vi' ? 'en' : 'vi';
+            localStorage.setItem('preferredLang', currentLang);
+            applyLanguage(currentLang);
+            
+            // Cập nhật lại thanh trạng thái sang ngôn ngữ mới nếu đang ở trạng thái mặc định
+            const statusText = document.getElementById('status-text');
+            if (statusText && !document.getElementById('status').classList.contains('processing')) {
+                statusText.innerText = statusText.getAttribute(`data-${currentLang}`);
+            }
+        });
+    }
+});
+// --------------------------------------------
+
 document.getElementById('clearBtn').addEventListener('click', async () => {
-    updateStatus("Đang quét và xóa cookie...", true);
+    updateStatus("clearing", true);
     try {
         const allCookies = await chrome.cookies.getAll({});
         let count = 0;
@@ -24,35 +80,55 @@ document.getElementById('clearBtn').addEventListener('click', async () => {
                 count++;
             }
         }
-        updateStatus(`Đã xóa ${count} cookies! Đang tải lại...`, false);
+        updateStatus("success", false, count);
         setTimeout(async () => {
             const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
             if (tab) await chrome.tabs.reload(tab.id);
         }, 1000);
     } catch (e) {
-        updateStatus("Lỗi: " + e.message, false);
+        updateStatus("error", false, e.message);
     }
 });
 
 document.getElementById('checkBtn').addEventListener('click', async () => {
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    const currentLang = localStorage.getItem('preferredLang') || 'vi';
+
     await chrome.scripting.insertCSS({
         target: { tabId: tab.id },
         files: ["viewer_styles.css"]
     });
+    
     await chrome.scripting.executeScript({
         target: { tabId: tab.id },
-        func: runCleanViewer
+        func: runCleanViewer,
+        args: [currentLang] // Truyền ngôn ngữ hiện tại vào trang web
     });
 });
 
-function runCleanViewer() {
+function runCleanViewer(lang) {
+    // Bộ từ điển thông báo hiển thị trên trang Studocu
+    const locales = {
+        vi: {
+            notFound: "⚠️ Không tìm thấy trang nào.\n(Hãy cuộn chuột xuống cuối tài liệu để web tải hết nội dung trước!)",
+            confirm: "Tìm thấy {count} trang.\nBấm OK để xử lý và tạo PDF..."
+        },
+        en: {
+            notFound: "⚠️ No pages found.\n(Please scroll down to the bottom of the document to let the website load all content first!)",
+            confirm: "Found {count} pages.\nClick OK to process and create PDF..."
+        }
+    };
+
+    const text = locales[lang] || locales['vi'];
     const pages = document.querySelectorAll('div[data-page-index]');
+    
     if (pages.length === 0) {
-        alert("⚠️ Không tìm thấy trang nào.\n(Hãy cuộn chuột xuống cuối tài liệu để web tải hết nội dung trước!)");
+        alert(text.notFound);
         return;
     }
-    if (!confirm(`Tìm thấy ${pages.length} trang.\nBấm OK để xử lý và tạo PDF...`)) return;
+    
+    const confirmMsg = text.confirm.replace("{count}", pages.length);
+    if (!confirm(confirmMsg)) return;
 
     const SCALE_FACTOR = 4;
     const HEIGHT_SCALE_DIVISOR = 4;
